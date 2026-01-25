@@ -1,0 +1,94 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\UnitController;
+use App\Http\Controllers\Api\TaxController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\VendorController;
+use App\Http\Controllers\Api\StockController;
+use App\Http\Controllers\Api\QuotationController;
+use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\PurchaseBillController;
+use App\Http\Controllers\Api\CreditNoteController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\OutstandingController;
+use App\Http\Controllers\Api\ReportsController;
+
+Route::post('/login',[AuthController::class,'login'])->name('login');
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/logout',[AuthController::class,'logout'])->name('logout');
+    Route::post('/change-password',[AuthController::class,'changePassword'])->name('changePassword');
+    Route::get('/auth-check',function(){
+        return response()->json(['authenticated'=>true]);
+    });
+    Route::get('/settings',[SettingsController::class,'index']);
+    Route::post('/settings',[SettingsController::class,'update']);
+    Route::get('/activity-logs',[ActivityLogController::class,'index']);
+    Route::get('/categories',[CategoryController::class,'index']);
+    Route::post('/categories',[CategoryController::class,'store']);
+    Route::put('/categories/{id}',[CategoryController::class,'update']);
+    Route::delete('/categories/{id}',[CategoryController::class,'destroy']);
+    Route::get('/units',[UnitController::class,'index']);
+    Route::post('/units',[UnitController::class,'store']);
+    Route::put('/unit/{id}',[UnitController::class,'update']);
+    Route::delete('/unit/{id}',[UnitController::class,'destroy']);
+    Route::get('/taxes',[TaxController::class,'index']);
+    Route::post('/taxes',[TaxController::class,'store']);
+    Route::put('/tax/{id}',[TaxController::class,'update']);
+    Route::delete('/tax/{id}',[TaxController::class,'destroy']);
+    Route::get('/products',[ProductController::class,'index']);
+    Route::post('/products',[ProductController::class,'store']);
+    Route::get('/products/{id}',[ProductController::class,'show']);
+    Route::put('/products/{id}',[ProductController::class,'update']);
+    Route::delete('/products/{id}',[ProductController::class,'destroy']);
+    Route::get('/products/{id}/{type}/{billId}',[ProductController::class,'getQuantity']);
+    Route::get('/customers',[CustomerController::class,'index']);
+    Route::post('/customers',[CustomerController::class,'store']);
+    Route::get('/customers/{id}',[CustomerController::class,'show']);
+    Route::put('/customers/{id}',[CustomerController::class,'update']);
+    Route::delete('/customers/{id}',[CustomerController::class,'destroy']);
+    Route::get('/vendors',[vendorController::class,'index']);
+    Route::post('/vendors',[vendorController::class,'store']);
+    Route::get('/vendors/{id}',[vendorController::class,'show']);
+    Route::put('/vendors/{id}',[vendorController::class,'update']);
+    Route::delete('/vendors/{id}',[vendorController::class,'destroy']);
+    Route::post('/stock/in',[StockController::class,'stockIn']);
+    Route::post('/stock/out',[StockController::class,'stockOut']);
+    Route::get('/stock/ledger/{product_id}',[StockController::class,'ledger']);
+    Route::get('/low-stock',[ProductController::class,'lowStock']);
+    Route::get('/quotations',[QuotationController::class,'index']);
+    Route::post('/quotations',[QuotationController::class,'store']);
+    Route::get('/quotations/{id}',[QuotationController::class,'show']);
+    Route::put('/quotations/{id}',[QuotationController::class,'update']);
+    Route::delete('/quotations/{id}',[QuotationController::class,'destroy']);
+    Route::post('/quotations/{id}/convert',[QuotationController::class,'convert']);
+    Route::get('/quotations/{id}/pdf',[QuotationController::class,'pdf']);
+    Route::get('/invoices',[InvoiceController::class, 'index']);
+    Route::get('/invoices/{id}',[InvoiceController::class,'show']);
+    Route::get('/invoices/{id}/pdf',[InvoiceController::class,'pdf']);
+    Route::post('/purchase-bills',[PurchaseBillController::class,'store']);
+    Route::get('/purchase-bills',[PurchaseBillController::class,'index']);
+    Route::get('/purchase-bills/{id}',[PurchaseBillController::class,'show']);
+    Route::get('/purchase-bills/{id}/pdf',[PurchaseBillController::class,'pdf']);
+    Route::get('/credit-notes', [CreditNoteController::class, 'index']);
+    Route::post('/credit-notes',[CreditNoteController::class,'store']);
+    Route::get('/credit-notes/{id}',[CreditNoteController::class,'show']);
+    Route::get('/payments',[PaymentController::class,'index']);
+    Route::post('/payments',[PaymentController::class,'store']);
+    Route::get('/outstanding/customers',[OutstandingController::class,'customers']);
+    Route::get('/outstanding/vendors',[OutstandingController::class,'vendors']);
+    Route::get('/reports/stock-summary',[ReportsController::class,'stockSummary']);
+    Route::get('/reports/sales',[ReportsController::class,'sales']);
+    Route::get('/reports/purchases',[ReportsController::class,'purchases']);
+    Route::get('/reports/profit-loss',[ReportsController::class,'profitLoss']);
+});
+
+Route::post('/forgot-password',[AuthController::class,'forgotPassword'])->name('forgotPassword');
+Route::post('/reset-password',[AuthController::class,'resetPassword'])->name('resetPassword');
+
