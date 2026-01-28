@@ -13,6 +13,9 @@ WORKDIR /var/www/html
 
 COPY . .
 
+# Make wait-for-db.sh executable
+RUN chmod +x wait-for-db.sh
+
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
