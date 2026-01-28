@@ -14,8 +14,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php \
-    -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
@@ -23,7 +22,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-di
 # Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
+# Expose port for Render
 EXPOSE 80
 
-# Auto-run migrations + start Apache
-CMD php artisan migrate --force && apache2-foreground
+# Use the wait-for-db script to start the app
+CMD ["./wait-for-db.sh"]
